@@ -74,7 +74,7 @@ WARNING 数据契约版本 2 高于本站支持的 1，部分字段可能显示�
 | 字段 | 类型 | 单位 / 例 | 说明 |
 |---|---|---|---|
 | `url` | 字符串 | `https://example.com/video/8333/` | 详情页地址 |
-| `cover_local` | 字符串 | `covers/8333_某剧.jpg` | 封面在本机的路径，见下文 |
+| `cover_local` | 字符串 | `8333_某剧.jpg` | 封面相对 `output/covers/` 的路径，见下文 |
 | `cover` | 字符串 | `https://img.example.com/8333.jpg` | 封面原始 URL（只留档，页面用 `cover_local`） |
 | `cover_size` | 整数 | 字节 | 封面文件大小 |
 | `score` | 数字 | `8.7` | 评分 |
@@ -203,16 +203,26 @@ WARNING 数据契约版本 2 高于本站支持的 1，部分字段可能显示�
 ## 一条完整记录
 
 ```json
-{"drama_id": "8333", "title": "示例：外卖员觉醒", "url": "https://example.com/video/8333/", "cover": "https://img.example.com/8333.jpg", "cover_local": "covers/8333_示例外卖员觉醒.jpg", "score": 8.0, "score_text": "8.0分", "episode_total": 1, "episode_text": "更新至1集", "update_ts": 1793386871, "update_time": "2026-10-24 18:30:41", "update_text": "18小时前", "is_new": false, "is_original": false, "badges": [], "tags": ["大男主", "都市", "逆袭"], "category_name": "AI漫剧", "panels": ["random"], "desc": "示例简介。", "author": "示例作者", "author_url": "https://example.com/author/156291/", "duration": 320, "views": 495930, "likes": 1090, "comments": null, "publish_time": "2026-10-10T15:45:03+08:00", "content_rating": "18+", "first_seen": "2025-12-28T10:12:00+08:00", "last_changed": "2026-01-01T00:00:00+08:00", "crawled_at": "2026-01-01T00:00:00+08:00", "schema_version": 1, "detail": {"episode_no": 1, "episodes": [{"no": 1, "url": "https://example.com/video/8333/", "current": true}], "facts": [{"label": "上线日期", "value": "2026-10-10"}], "topics": [], "sources": []}}
+{"drama_id": "8333", "title": "示例：外卖员觉醒", "url": "https://example.com/video/8333/", "cover": "https://img.example.com/8333.jpg", "cover_local": "8333_示例外卖员觉醒.jpg", "score": 8.0, "score_text": "8.0分", "episode_total": 1, "episode_text": "更新至1集", "update_ts": 1793386871, "update_time": "2026-10-24 18:30:41", "update_text": "18小时前", "is_new": false, "is_original": false, "badges": [], "tags": ["大男主", "都市", "逆袭"], "category_name": "AI漫剧", "panels": ["random"], "desc": "示例简介。", "author": "示例作者", "author_url": "https://example.com/author/156291/", "duration": 320, "views": 495930, "likes": 1090, "comments": null, "publish_time": "2026-10-10T15:45:03+08:00", "content_rating": "18+", "first_seen": "2025-12-28T10:12:00+08:00", "last_changed": "2026-01-01T00:00:00+08:00", "crawled_at": "2026-01-01T00:00:00+08:00", "schema_version": 1, "detail": {"episode_no": 1, "episodes": [{"no": 1, "url": "https://example.com/video/8333/", "current": true}], "facts": [{"label": "上线日期", "value": "2026-10-10"}], "topics": [], "sources": []}}
 ```
 
 ---
 
-## `cover_local` 怎么被解析
+## `cover_local` 怎么写
 
-展示站收到 `cover_local` 后做三件事：
+**相对 `<output>/covers/` 的路径，用 `/` 分隔，不带 `covers/` 前缀。**
+采集工具产出的文件名是 `<drama_id>_<剧名>.jpg`，所以值通常就是一个文件名；
+自己造数据时也照这个写。
 
-1. 绝对路径直接用；只写文件名（或写 `covers/xxx.jpg`）时，去 `output/covers/` 下找。
+| 写法 | 结果 |
+|---|---|
+| `8333_某剧.jpg` | ✅ 正确 |
+| `covers/8333_某剧.jpg` | ❌ 会拼成 `output/covers/covers/…`，永远找不到 |
+| `O:\…\output\covers\8333_某剧.jpg` | ⚠️ 能读（兼容老数据），但搬目录或换机器就全灰 |
+
+解析过程（`hgdb/model.py` 的 `cover_url()`）：
+
+1. 相对值拼 `<output>/covers/`；绝对路径原样用（只为兼容老数据）。
 2. 文件**存在** → 输出 `/covers/<URL 编码后的文件名>`（文件名含中文和空格，
    必须编码）。
 3. 文件**不存在** → 返回 `null`，前端画占位图，不会出现一堆裂图。

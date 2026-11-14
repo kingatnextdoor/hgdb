@@ -11,7 +11,7 @@ clone 下来就能跑。不用 MySQL，不用 Node，不用前端构建。
 ## 30 秒看效果
 
 ```bash
-git clone https://github.com/your-name/duanju-web.git
+git clone https://github.com/kingatnextdoor/duanju-web.git
 cd duanju-web
 python webctl.py start --output sample --open
 ```

@@ -39,6 +39,10 @@ duanju-web = "webctl:main"
 duanju-serve = "web.server:main"
 duanju-manage = "manage:main"
 
+[project.urls]
+Homepage = "https://github.com/kingatnextdoor/duanju-web"
+Documentation = "https://github.com/kingatnextdoor/duanju-web#docs"
+
 [tool.setuptools]
 # 只打包 Python 包和根目录脚本，不带 output/、sample/、tests/。
 packages = ["web"]

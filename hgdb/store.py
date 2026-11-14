@@ -18,7 +18,7 @@ import threading
 from datetime import datetime
 from pathlib import Path
 
-from web import config, dataset, dbio, ed2kdb, sources, videodb
+from hgdb import config, dataset, dbio, ed2kdb, sources, videodb
 
 
 def _now():

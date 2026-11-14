@@ -2,11 +2,11 @@
 """展示站的全部配置：路径、端口、分页上限、数据库位置、评论。
 
 **这里是唯一的配置来源。** 没有 .env、不读环境变量、不读配置文件——要改什么就
-改这里的常量，然后 `python webctl.py restart`（端口/数据库/评论都要重启才生效）。
+改这里的常量，然后 `python hgdbctl.py restart`（端口/数据库/评论都要重启才生效）。
 """
 from pathlib import Path
 
-PKG_DIR = Path(__file__).resolve().parent        # web/
+PKG_DIR = Path(__file__).resolve().parent        # hgdb/
 ROOT_DIR = PKG_DIR.parent                        # 仓库根
 STATIC_DIR = PKG_DIR / 'static'
 DEFAULT_OUTPUT = ROOT_DIR / 'output'
@@ -37,7 +37,7 @@ SCHEMA_VERSION = 1
 # ---- 数据库位置 ----
 # 留空 = 每个库一个文件、跟着 output 目录走（ed2k.sqlite3 / video.sqlite3）；
 # 填路径 = 两个库合并到这一个文件里（相对路径按仓库根解析，换盘/备份用）。
-# 改完要重启服务才生效：python webctl.py restart
+# 改完要重启服务才生效：python hgdbctl.py restart
 DB_SQLITE = ''
 
 # ---- 站点身份 ----
@@ -59,7 +59,7 @@ GISCUS_REPO = ''
 GISCUS_REPO_ID = ''
 GISCUS_CATEGORY = 'General'
 GISCUS_CATEGORY_ID = ''
-# 可选：主题 / 界面语言 / 讨论映射方式。留空 = 用 web/giscus.py 里的默认值
+# 可选：主题 / 界面语言 / 讨论映射方式。留空 = 用 hgdb/giscus.py 里的默认值
 #（dark_dimmed / zh-CN / specific）。别把 mapping 改成 pathname 或 url —— 详情页是
 # 弹层、URL 不变，会把所有剧的评论混到一条讨论下面。
 GISCUS_THEME = ''

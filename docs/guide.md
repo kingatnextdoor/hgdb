@@ -45,10 +45,10 @@
 
 ## 二、进入项目目录
 
-把项目文件夹放到你喜欢的位置，例如 `D:\duanju-web`。之后每条命令都要先进入这个目录：
+把项目文件夹放到你喜欢的位置，例如 `D:\hgdb`。之后每条命令都要先进入这个目录：
 
 ```bash
-cd /d D:\duanju-web
+cd /d D:\hgdb
 ```
 
 （这一步是把命令行的「当前目录」切过去，之后就不用再敲了。）
@@ -65,7 +65,7 @@ cd /d D:\duanju-web
 ## 四、启动
 
 ```bash
-python webctl.py start --open
+python hgdbctl.py start --open
 ```
 
 看到类似下面几行就成功了，浏览器会自动打开：
@@ -74,28 +74,28 @@ python webctl.py start --open
 已启动 pid=12345
   地址 http://127.0.0.1:8765
   数据 1649 部
-  日志 O:\...\output\web.log
+  日志 O:\...\output\hgdb.log
 ```
 
 ## 五、常用命令
 
 | 命令 | 作用 |
 |---|---|
-| `python webctl.py start` | 后台启动（关掉命令行窗口也不会停） |
-| `python webctl.py start --open` | 启动并打开浏览器 |
-| `python webctl.py stop` | 停止 |
-| `python webctl.py restart` | 重启（改了配置或代码后用） |
-| `python webctl.py status` | 在不在跑、端口、多少部 |
-| `python webctl.py log -f` | 实时看日志（出问题时用） |
-| `python webctl.py open` | 只打开浏览器 |
-| `python webctl.py start -f` | 前台跑，报错直接打在屏幕上 |
+| `python hgdbctl.py start` | 后台启动（关掉命令行窗口也不会停） |
+| `python hgdbctl.py start --open` | 启动并打开浏览器 |
+| `python hgdbctl.py stop` | 停止 |
+| `python hgdbctl.py restart` | 重启（改了配置或代码后用） |
+| `python hgdbctl.py status` | 在不在跑、端口、多少部 |
+| `python hgdbctl.py log -f` | 实时看日志（出问题时用） |
+| `python hgdbctl.py open` | 只打开浏览器 |
+| `python hgdbctl.py start -f` | 前台跑，报错直接打在屏幕上 |
 
 换端口 / 换数据目录 / 让局域网里的手机也能看：
 
 ```bash
-python webctl.py start --port 9000          # 8765 被占用时
-python webctl.py start --output D:\my_data  # 数据在别的文件夹
-python webctl.py start --host 0.0.0.0       # 手机、平板也能访问
+python hgdbctl.py start --port 9000          # 8765 被占用时
+python hgdbctl.py start --output D:\my_data  # 数据在别的文件夹
+python hgdbctl.py start --host 0.0.0.0       # 手机、平板也能访问
 ```
 
 > ⚠️ `--host 0.0.0.0` 等于把站点开放给整个局域网，而且**没有登录密码**。
@@ -126,7 +126,7 @@ python webctl.py start --host 0.0.0.0       # 手机、平板也能访问
 - **收藏**：简介上方的「☆ 收藏」，点过变「★ 已收藏」，卡片右上角有星标
 - **改标签**：标签区直接改，改完即存
 - **播放**：本地视频区块里点一行就在弹层里播，能拖进度条
-- **评论**：需要先配（见 [web.md](web.md) 的评论一节）
+- **评论**：需要先配（见 [hgdb.md](hgdb.md) 的评论一节）
 
 ### 右上角「ED2K 链接库」
 
@@ -199,18 +199,18 @@ ED2K 链接、本地视频、标签修改、收藏**不用手写文件**，都�
 
 | 现象 | 怎么办 |
 |---|---|
-| 浏览器打不开页面 | `python webctl.py status` 看是否在跑；没跑就 `start` |
-| 提示端口 8765 被占用 | `python webctl.py start --port 9000` |
+| 浏览器打不开页面 | `python hgdbctl.py status` 看是否在跑；没跑就 `start` |
+| 提示端口 8765 被占用 | `python hgdbctl.py start --port 9000` |
 | 页面一片空白、显示 0 部 | 数据目录不对：确认 `output/` 里有 `duanju_*.jsonl`，或用 `--output` 指对 |
-| 放了新文件但页面没变化 | 文件名要 `duanju_` 开头、`.jsonl` 结尾；点「刷新」；还不行看 `python webctl.py log -n 50` |
+| 放了新文件但页面没变化 | 文件名要 `duanju_` 开头、`.jsonl` 结尾；点「刷新」；还不行看 `python hgdbctl.py log -n 50` |
 | 封面都是灰色 | 图片文件不在 `output/covers/`，或 `cover_local` 指错了 |
-| 评论显示「使用 GitHub 登录」 | `web/config.py` 的 `GISCUS_*` 没填全，或仓库不是 public / 没开 Discussions；改完要 `restart` |
+| 评论显示「使用 GitHub 登录」 | `hgdb/config.py` 的 `GISCUS_*` 没填全，或仓库不是 public / 没开 Discussions；改完要 `restart` |
 | 视频是灰条不能播 | 那条记录是旧版用浏览器选文件夹扫进来的，根目录不是绝对路径；用「填服务器路径扫描」重新入库 |
 
 想知道「现在到底跑的是什么、数据在哪」，一条命令就够：
 
 ```bash
-python webctl.py status
+python hgdbctl.py status
 ```
 
 更细的排错见 [ops.md](ops.md)。

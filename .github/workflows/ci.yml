@@ -40,7 +40,7 @@ jobs:
 
       - name: Boot with sample data
         run: |
-          python webctl.py start --output sample -f --port 8899 > /tmp/serve.log 2>&1 &
+          python hgdbctl.py start --output sample -f --port 8899 > /tmp/serve.log 2>&1 &
           for i in $(seq 1 30); do
             if curl -fsS http://127.0.0.1:8899/api/stats -o /tmp/stats.json; then break; fi
             sleep 1
@@ -54,9 +54,9 @@ jobs:
       - name: Boot with empty output
         # 没有数据也必须能启动，页面显示 0 部而不是 500
         run: |
-          python webctl.py stop || true
+          python hgdbctl.py stop || true
           mkdir -p /tmp/empty
-          python webctl.py start --output /tmp/empty -f --port 8898 > /tmp/serve2.log 2>&1 &
+          python hgdbctl.py start --output /tmp/empty -f --port 8898 > /tmp/serve2.log 2>&1 &
           for i in $(seq 1 30); do
             if curl -fsS http://127.0.0.1:8898/api/stats -o /tmp/stats2.json; then break; fi
             sleep 1

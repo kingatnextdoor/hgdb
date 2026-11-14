@@ -23,7 +23,7 @@ import threading
 from datetime import datetime
 from pathlib import Path
 
-from web import config, dbio, queries, schema, video
+from hgdb import config, dbio, queries, schema, video
 
 # 列表接口返回的字段（含刮削结果：前端在文件列表里直接显示匹配状态）
 FILE_FIELDS = ('id', 'root', 'rel_path', 'name', 'stem', 'ext',

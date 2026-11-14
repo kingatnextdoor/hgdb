@@ -14,9 +14,9 @@ import urllib.request
 from pathlib import Path
 from unittest import mock
 
-from tests.web_support import build_output, record
-from web import api, config, ed2k, httpd, multipart, queries
-from web.store import Store
+from hgdb import api, config, ed2k, httpd, multipart, queries
+from hgdb.store import Store
+from tests.support import build_output, record
 
 HASH_A = 'A' * 32
 HASH_B = 'B' * 32

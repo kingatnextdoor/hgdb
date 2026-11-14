@@ -7,9 +7,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from tests.web_support import build_output, record
-from web import api, config, video, videodb
-from web.store import Store
+from hgdb import api, config, video, videodb
+from hgdb.store import Store
+from tests.support import build_output, record
 
 
 def params(**kwargs):
@@ -95,7 +95,7 @@ class RepoTest(unittest.TestCase):
             self._settings())
 
     def _settings(self):
-        from web import dbio
+        from hgdb import dbio
         return dbio.Config()
 
     def _scan(self):
@@ -174,7 +174,7 @@ class ApiTest(unittest.TestCase):
             self._settings())
 
     def _settings(self):
-        from web import dbio
+        from hgdb import dbio
         return dbio.Config()
 
     def test_scan_by_path(self):
@@ -279,7 +279,7 @@ class LocalVideoFilterTest(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.tree = make_video_tree(Path(self.tmp.name) / 'media')
-        from web import dbio
+        from hgdb import dbio
         self.settings = dbio.Config()
         self.store = Store(build_output(
             self.tmp.name, records=[record('1', '有视频的剧'), record('2', '没视频的剧')]),
@@ -328,6 +328,6 @@ class ConfigTest(unittest.TestCase):
             self.assertIn(ext, config.VIDEO_EXTS)
 
     def test_for_video_sqlite_uses_own_file(self):
-        from web import dbio
+        from hgdb import dbio
         cfg = dbio.Config().for_video(Path('out'))
         self.assertEqual(cfg.sqlite_path, Path('out') / config.VIDEO_DB)

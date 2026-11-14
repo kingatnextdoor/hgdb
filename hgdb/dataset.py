@@ -31,10 +31,10 @@
 from collections import Counter
 from pathlib import Path
 
-from web import config, ed2k, model, sources
+from hgdb import config, ed2k, model, sources
 
 # 兼容旧的 import 路径：以前外部脚本直接 `from dataset import LIST_FIELDS / list_payload`
-from web.model import LIST_FIELDS, list_payload  # noqa: F401
+from hgdb.model import LIST_FIELDS, list_payload  # noqa: F401
 
 # 兼容旧代码：以前外部脚本从 dataset 取这两个常量
 TAG_EDITS_FILE = config.TAG_EDITS_FILE

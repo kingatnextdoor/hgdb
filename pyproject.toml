@@ -3,13 +3,13 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "duanju-web"
+name = "hgdb"
 version = "1.0.0"
 description = "短剧数据展示站：把 JSONL + 封面变成一个可浏览、可筛选、可标注、可播放的本地站点"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
-authors = [{ name = "duanju-web contributors" }]
+authors = [{ name = "hgdb contributors" }]
 keywords = ["sqlite", "http", "jsonl", "self-hosted", "no-dependencies"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -35,22 +35,22 @@ dev = [
 ]
 
 [project.scripts]
-duanju-web = "webctl:main"
-duanju-serve = "web.server:main"
-duanju-manage = "manage:main"
+hgdb = "hgdbctl:main"
+hgdb-serve = "hgdb.server:main"
+hgdb-manage = "manage:main"
 
 [project.urls]
-Homepage = "https://github.com/kingatnextdoor/duanju-web"
-Documentation = "https://github.com/kingatnextdoor/duanju-web#docs"
+Homepage = "https://github.com/kingatnextdoor/hgdb"
+Documentation = "https://github.com/kingatnextdoor/hgdb#docs"
 
 [tool.setuptools]
 # 只打包 Python 包和根目录脚本，不带 output/、sample/、tests/。
-packages = ["web"]
-py-modules = ["manage", "webctl", "compact_exports"]
+packages = ["hgdb"]
+py-modules = ["manage", "hgdbctl", "compact_exports"]
 
 [tool.setuptools.package-data]
 # 前端资源：没有这些，pip 装完之后页面是白屏。
-web = ["static/*", "static/css/*", "static/js/*"]
+hgdb = ["static/*", "static/css/*", "static/js/*"]
 
 [tool.ruff]
 line-length = 100

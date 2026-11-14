@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 """刮削匹配测试：文件名清洗 -> 四级匹配引擎 -> 落库 -> 接口。
 
-匹配是纯函数（web/scrape.py），不碰库；仓库与接口的测试用临时 sqlite。
+匹配是纯函数（hgdb/scrape.py），不碰库；仓库与接口的测试用临时 sqlite。
 """
 import tempfile
 import unittest
 
-from tests.web_support import build_output, record
-from web import api, dbio, scrape, videodb
-from web.store import Store
+from hgdb import api, dbio, scrape, videodb
+from hgdb.store import Store
+from tests.support import build_output, record
 
 DRAMAS = [
     {'id': '101', 'title': '50元买断人妻'},

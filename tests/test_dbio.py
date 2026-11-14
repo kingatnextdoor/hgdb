@@ -5,8 +5,8 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from web import config, dbio, schema
-from web.store import Store
+from hgdb import config, dbio, schema
+from hgdb.store import Store
 
 
 def tmpdir(test):
@@ -171,7 +171,7 @@ class DefaultSettingsTest(unittest.TestCase):
     def test_store_uses_given_settings(self):
         root = tmpdir(self)
         (root / 'duanju_1.jsonl').write_text('', encoding='utf-8')
-        with mock.patch('web.store.dataset.load',
+        with mock.patch('hgdb.store.dataset.load',
                         return_value={'items': [], 'by_id': {}, 'stats': {},
                                       'facets': {}, 'mtime': 0}):
             cfg = dbio.Config(tmpdir(self) / 'z.sqlite3')
@@ -183,7 +183,7 @@ class DefaultSettingsTest(unittest.TestCase):
 
 class StoreSignatureTest(unittest.TestCase):
     def _store(self, cfg, root):
-        with mock.patch('web.store.dataset.load',
+        with mock.patch('hgdb.store.dataset.load',
                         return_value={'items': [], 'by_id': {}, 'stats': {},
                                       'facets': {}, 'mtime': 0}):
             return Store(root, cfg)

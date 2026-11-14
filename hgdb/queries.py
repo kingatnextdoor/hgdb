@@ -2,9 +2,9 @@
 """查询层：筛选、排序、分页。纯函数，不碰 HTTP、不碰文件。
 
 前端工具栏的每一项都对应这里的一个参数；加筛选条件只需要改这一个文件
-（外加前端加个控件），docs/web.md 里有步骤。
+（外加前端加个控件），docs/hgdb.md 里有步骤。
 """
-from web import config
+from hgdb import config
 
 # 排序键。值是取值函数，允许 lambda 之外的普通函数，方便单测。
 SORTS = {

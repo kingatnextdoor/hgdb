@@ -22,7 +22,7 @@ import threading
 from datetime import datetime
 from pathlib import Path
 
-from web import config, dbio, ed2k, queries, schema
+from hgdb import config, dbio, ed2k, queries, schema
 
 # 列表接口返回的字段（不含自增 id：对前端来说 hash 才是主键）
 LINK_FIELDS = ('hash', 'name', 'title', 'episode', 'episode_label',

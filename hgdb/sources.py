@@ -10,7 +10,7 @@ import json
 import os
 from pathlib import Path
 
-from web import config
+from hgdb import config
 
 
 def iter_jsonl(path):

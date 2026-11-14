@@ -4,8 +4,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from tests.web_support import build_output, record
-from web import config, dataset
+from hgdb import config, dataset
+from tests.support import build_output, record
 
 
 class MergeRulesTest(unittest.TestCase):

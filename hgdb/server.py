@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """展示站入口。
 
-    python web/server.py                    # 默认 127.0.0.1:8765
-    python web/server.py --port 9000 --open
-    python -m web.server --output ./output  # 在仓库根也可以这样跑
+    python hgdb/server.py                    # 默认 127.0.0.1:8765
+    python hgdb/server.py --port 9000 --open
+    python -m hgdb.server --output ./output  # 在仓库根也可以这样跑
 
 只管四件事：解析参数、准备配置、建 Store、把服务器跑起来。
 真正的 HTTP 处理在 httpd.py，数据库连接在 dbio.py。
@@ -14,12 +14,12 @@ import webbrowser
 from pathlib import Path
 
 try:                                    # 作为包安装后（pip install）直接可用
-    from web import config, dbio, httpd
-    from web.store import Store
-except ImportError:                     # 直接 python web/server.py 时把仓库根加进来
+    from hgdb import config, dbio, httpd
+    from hgdb.store import Store
+except ImportError:                     # 直接 python hgdb/server.py 时把仓库根加进来
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-    from web import config, dbio, httpd  # noqa: E402
-    from web.store import Store  # noqa: E402
+    from hgdb import config, dbio, httpd  # noqa: E402
+    from hgdb.store import Store  # noqa: E402
 
 
 def build_parser():

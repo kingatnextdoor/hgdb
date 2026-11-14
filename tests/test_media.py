@@ -13,9 +13,9 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-from tests.web_support import build_output, record
-from web import api, dbio, httpd, video, videodb
-from web.store import Store
+from hgdb import api, dbio, httpd, video, videodb
+from hgdb.store import Store
+from tests.support import build_output, record
 
 PAYLOAD = bytes(range(256)) * 8       # 2048 字节，内容可校验（每 256 一个循环）
 

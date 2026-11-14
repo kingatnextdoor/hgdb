@@ -19,7 +19,7 @@ ed2kdb / videodb / dataset 里。所以约定：
     output/ed2k.sqlite3    ED2K 链接库
     output/video.sqlite3   本地视频文件库
 
-要整体指到别处（换盘 / 备份）就改 `web/config.py` 里的 `DB_SQLITE`（相对路径按
+要整体指到别处（换盘 / 备份）就改 `hgdb/config.py` 里的 `DB_SQLITE`（相对路径按
 仓库根解析），改完重启服务。**没有 .env 了**：配置只有「代码里的常量」一个来源，
 不读配置文件、也不读环境变量，出问题看 config.py 就能看全。
 """
@@ -27,7 +27,7 @@ import sqlite3
 import threading
 from pathlib import Path
 
-from web import config
+from hgdb import config
 
 
 class DbError(RuntimeError):
@@ -52,7 +52,7 @@ class Config:
 
     @classmethod
     def from_config(cls, sqlite_path=None, root=None):
-        """按 `web/config.py` 里的 `DB_SQLITE` 造配置。
+        """按 `hgdb/config.py` 里的 `DB_SQLITE` 造配置。
 
         没有配置文件、没有环境变量：想换位置就改那个常量（改完重启服务）。
         `sqlite_path` 显式给值时优先，测试靠它隔离。

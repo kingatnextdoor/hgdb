@@ -9,14 +9,14 @@
 | 脚本 | 干什么 |
 |---|---|
 | `manage.py` | 看数据（`stats` / `recent`）、清东西（`reset`）。只读导出文件，不碰数据库 |
-| `webctl.py` | 展示站启停：`start` / `stop` / `restart` / `status` / `log` / `open` |
+| `hgdbctl.py` | 展示站启停：`start` / `stop` / `restart` / `status` / `log` / `open` |
 | `compact_exports.py` | 把攒下的多个 jsonl 合并成一个快照，顺带备份旧文件 |
 
 ```bash
 python manage.py stats
 python manage.py recent -n 20
 python manage.py reset --purge-output --drop-covers -y
-python webctl.py status
+python hgdbctl.py status
 python compact_exports.py --write
 ```
 
@@ -26,14 +26,14 @@ python compact_exports.py --write
 
 ```bash
 python manage.py stats          # 多少部、封面几张、最近变动时间
-python webctl.py status         # 服务在不在、端口、数据条数
-tail -50 output/web.log         # 有异常时先看这里
+python hgdbctl.py status         # 服务在不在、端口、数据条数
+tail -50 output/hgdb.log         # 有异常时先看这里
 ```
 
 `stats` 的输出长这样：
 
 ```
-导出目录：D:\duanju-web\output
+导出目录：D:\hgdb\output
   文件        1 个（最新 duanju_2026-01-01T00-00-00.jsonl）
   去重后      24 部
   封面        本地 18 张（记录里带本地路径的 18 部）
@@ -126,26 +126,26 @@ python compact_exports.py --write --keep-old   # 只多写一个合并文件，�
 
 | 现象 | 原因 / 处理 |
 |---|---|
-| `start` 说成功，下条命令就没了 | 进程没脱离控制台（历史上踩过）。用 `webctl.py` 起，别自己 `nohup` |
-| 端口被占用 | `python webctl.py start --port 9000` |
+| `start` 说成功，下条命令就没了 | 进程没脱离控制台（历史上踩过）。用 `hgdbctl.py` 起，别自己 `nohup` |
+| 端口被占用 | `python hgdbctl.py start --port 9000` |
 | `status` 说在跑但页面打不开 | 本机代理劫持了 `127.0.0.1`，见下一条 |
 | curl / 脚本访问返回 502 或空 | shell 里有 `http_proxy` 指向本地代理。用 `curl --noproxy "*"`，脚本里 `build_opener(ProxyHandler({}))` |
 | 数据 0 部 | `--output` 指错，或 `output/` 里没有 `duanju_*.jsonl` |
-| 放了新文件页面不刷新 | 文件名必须是 `duanju_*.jsonl`；点「刷新」；看 `webctl.py log -n 50` |
+| 放了新文件页面不刷新 | 文件名必须是 `duanju_*.jsonl`；点「刷新」；看 `hgdbctl.py log -n 50` |
 | 中文搜索总是 0 条 | 查询串编码问题（`httpd._decoded_path` 处理 UTF-8 / GBK）。先确认浏览器里搜也一样 |
 | 页面白屏、控制台报 module 错 | 用 `file://` 直接打开了 `index.html`。ES module 必须走 http |
 | 静态资源 404 | `/static/js/xxx.js` 这种子路径要走 `resolve_under()` 校验，看日志里的路径 |
 | 封面全灰 | `cover_local` 指的文件不存在（搬目录时没带 `covers/`） |
 | 视频灰条 | 三条原因：root 不是绝对路径 / 文件不在了 / 路径含 `..` |
-| 评论点登录没反应 | giscus 回跳要 `consumeLoginReturn()` 接住，见 [web.md](web.md) |
+| 评论点登录没反应 | giscus 回跳要 `consumeLoginReturn()` 接住，见 [hgdb.md](hgdb.md) |
 | 统计数字带 `e+03` | `SUM(BIGINT)` 是浮点，SQL 里要 `CAST(... AS BIGINT)` |
-| 改了 `config.py` 不生效 | 配置只在启动时读，`python webctl.py restart` |
+| 改了 `config.py` 不生效 | 配置只在启动时读，`python hgdbctl.py restart` |
 
 pid 文件丢了导致 `stop` 认不出进程：
 
 ```bash
 netstat -ano | findstr 8765        # Windows
-python webctl.py stop --pid <上面的 pid>
+python hgdbctl.py stop --pid <上面的 pid>
 ```
 
 ---
@@ -158,7 +158,7 @@ python webctl.py stop --pid <上面的 pid>
 |---|---|---|
 | `output/state.sqlite3` | 没有状态库，剧集数据就是导出文件 | 直接删 |
 | `output/jobdir/` | 早期断点续跑的工作目录 | 直接删 |
-| `.env` / `.env.example` | 配置全部收进 `web/config.py` | 直接删。原来的 giscus 四项已经搬进 `config.py` |
+| `.env` / `.env.example` | 配置全部收进 `hgdb/config.py` | 直接删。原来的 giscus 四项已经搬进 `config.py` |
 
 另外两处语义变化，升级时留意：
 

@@ -29,7 +29,7 @@ def _load():
     """读全部导出并合并，返回 (合并后的记录 dict, 文件列表)。"""
     if str(ROOT) not in sys.path:
         sys.path.insert(0, str(ROOT))
-    from web import model, sources
+    from hgdb import model, sources
 
     records, _ = sources.read_exports(OUTPUT)
     merged = {}

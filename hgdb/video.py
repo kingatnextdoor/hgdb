@@ -14,7 +14,7 @@
 """
 from pathlib import Path, PurePosixPath, PureWindowsPath
 
-from web import config
+from hgdb import config
 
 
 def is_video(rel_path):

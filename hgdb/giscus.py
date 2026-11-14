@@ -4,7 +4,7 @@
 为什么不让前端硬编码
 --------------------
 这些值都要从 https://giscus.app 的配置页生成，换仓库就得改。统一收在
-`web/config.py` 里（跟数据库位置、分页上限放在一起），页面启动时用
+`hgdb/config.py` 里（跟数据库位置、分页上限放在一起），页面启动时用
 `GET /api/config` 取一次：
 
     GISCUS_REPO = 'owner/repo'          # 必须是公开仓库，且开了 Discussions
@@ -25,7 +25,7 @@ term 为什么是 `drama:<id>`
 讨论。用 `specific` + 我们的 term 最稳：一部剧一条讨论，剧名改了也不会串
 （剧名进 term 就会因为改名而"换一条讨论"）。
 """
-from web import config
+from hgdb import config
 
 # 配置常量名 -> 内部字段名。顺序也是文档里的顺序
 KEYS = {
@@ -49,7 +49,7 @@ TERM_PREFIX = 'drama'
 
 
 def _from_config():
-    """按 web/config.py 里的常量拼一份「键名 -> 值」的表。"""
+    """按 hgdb/config.py 里的常量拼一份「键名 -> 值」的表。"""
     return {name: getattr(config, name, '') for name in KEYS.values()}
 
 

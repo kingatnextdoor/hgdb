@@ -26,7 +26,7 @@
 import difflib
 import re
 
-from web import ed2k
+from hgdb import ed2k
 
 # 自动确认的最低置信度：>= 它直接写 matched，以下进 pending 等人工点头
 AUTO_SCORE = 0.85

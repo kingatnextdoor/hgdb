@@ -9,15 +9,15 @@
 2. **业务不碰 HTTP**：路由、筛选、合并全是纯函数，能脱离服务器单测。
 3. **前端无构建**：原生 ES module + 原生 CSS，没有 npm，改完刷新就生效。
 
-配置**只有一个来源**：`web/config.py` 里的常量。
-没有 `.env`，不读环境变量。改完 `python webctl.py restart`。
+配置**只有一个来源**：`hgdb/config.py` 里的常量。
+没有 `.env`，不读环境变量。改完 `python hgdbctl.py restart`。
 
 ---
 
 ## 目录与分层
 
 ```
-web/
+hgdb/
 ├── server.py       入口：argparse → Store → httpd.make_server().serve_forever()
 ├── config.py       路径 / 端口 / 分页上限 / 文件名 / MIME / 评论（唯一配置来源）
 ├── dbio.py         数据库连接层：按 config 建配置、连接包装、DbError
@@ -115,7 +115,7 @@ jsonl 逐条合并（新覆盖旧、空值不覆盖）
 | `ed2k.sqlite3` | `ed2k_batch` `ed2k_link` | 本站 |
 | `video.sqlite3` | `video_batch` `video_file` `scrape_batch` | 本站 |
 
-想整体挪位置（换盘、备份）就改 `config.DB_SQLITE = './data/duanju.sqlite3'`，
+想整体挪位置（换盘、备份）就改 `config.DB_SQLITE = './data/hgdb.sqlite3'`，
 两个库会合并到这一个文件。改完要重启。
 
 ### 加表 / 加字段
@@ -282,7 +282,7 @@ ALTER TABLE ed2k_link ADD COLUMN note TEXT NOT NULL DEFAULT '';
 手工流程刻意拆成两步：预览（`/api/scrape/scan`，dry-run 只算不写）→ 执行
 （`/api/scrape/apply`，写库 + 记 `scrape_batch`）。前端渲染成确认表，每行可改选、忽略。
 
-引擎在 `web/scrape.py`（纯函数），四级降级、命中即停：
+引擎在 `hgdb/scrape.py`（纯函数），四级降级、命中即停：
 
 | 级别 | 方法 | 分数 | 结果 |
 |---|---|---|---|
@@ -339,7 +339,7 @@ httpd 按 id 取行、拼路径、流式发字节。
 详情弹层最底部的评论区块用 [giscus](https://github.com/giscus/giscus)：评论存在
 GitHub Discussions 里，本站不建表、不做用户系统，只嵌一个 iframe。
 
-配置在 `web/config.py`：
+配置在 `hgdb/config.py`：
 
 ```python
 GISCUS_REPO = 'owner/repo'          # 公开仓库，装过 giscus app，且开了 Discussions
@@ -415,12 +415,12 @@ main.js       绑事件 + 首次加载（唯一操作 DOM 事件的地方）
    `<button class="tag" data-only="xxx">`
 3. `static/js/main.js`：`select` 的 id 加进 `bindFilters`（`#onlybar` 不用，`onlybar.js` 自己绑）
 4. `static/js/state.js`：`state` 加字段，`readUrl` / `writeUrl` / `queryString` 同步
-5. `tests/test_web_queries.py` 补用例
+5. `tests/test_queries.py` 补用例
 
 ### 加一个字段
 
 1. 采集侧在导出的 jsonl 里带上这个字段（字段清单见 [data.md](data.md)）
-2. `web/model.py`：`normalize()` 加映射；要出现在列表就加进 `LIST_FIELDS`
+2. `hgdb/model.py`：`normalize()` 加映射；要出现在列表就加进 `LIST_FIELDS`
 3. 前端在 `list.js:cardHtml` 或 `detail.js:factsHtml` 里展示
 
 ### 加一个接口
@@ -466,7 +466,7 @@ ROUTES = (
 **`tags_edited`**：老数据可能是 `null`，现在统一给 `false`，前端一律按真值判断。
 
 **multipart**：Python 3.13 起标准库 `cgi` 被移除，`cgi.FieldStorage` 直接 ImportError。
-`web/multipart.py` 是最小实现，只覆盖浏览器上传用得到的那部分。要做「拖整个文件夹」
+`hgdb/multipart.py` 是最小实现，只覆盖浏览器上传用得到的那部分。要做「拖整个文件夹」
 别在这上面加，换框架更划算。
 
 **上传的中文文件名**：multipart header 按 latin-1 解码，浏览器塞进去的是 UTF-8 字节。

@@ -12,9 +12,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from tests.web_support import build_output, record
-from web import api, config
-from web.store import Store
+from hgdb import api, config
+from hgdb.store import Store
+from tests.support import build_output, record
 
 
 def params(**kwargs):

@@ -4,9 +4,9 @@ import tempfile
 import unittest
 from unittest import mock
 
-from tests.web_support import build_output, record
-from web import api, config, dbio, giscus
-from web.store import Store
+from hgdb import api, config, dbio, giscus
+from hgdb.store import Store
+from tests.support import build_output, record
 
 # 一份「配全了」的配置，和 giscus.app 生成的片段同构
 ENV = {
@@ -59,7 +59,7 @@ class SettingsTest(unittest.TestCase):
 
     def test_env_ignores_config(self):
         """传了 env 就只用它，不去读 config.py（测试隔离靠这个）。"""
-        with mock.patch('web.giscus._from_config',
+        with mock.patch('hgdb.giscus._from_config',
                         side_effect=AssertionError('不该读 config.py')):
             self.assertIsNone(giscus.settings({}))
             self.assertEqual(giscus.settings(ENV)['repo'], 'owner/repo')
@@ -101,14 +101,14 @@ class ConfigRouteTest(unittest.TestCase):
         return api.dispatch(self.store, 'GET', '/api/config', {}, None)
 
     def test_unconfigured_gives_null(self):
-        with mock.patch('web.giscus.settings', return_value=None):
+        with mock.patch('hgdb.giscus.settings', return_value=None):
             code, payload = self.call()
         self.assertEqual(code, 200)
         self.assertIsNone(payload['giscus'])
 
     def test_configured_payload(self):
         conf = giscus.settings(ENV)
-        with mock.patch('web.giscus.settings', return_value=conf):
+        with mock.patch('hgdb.giscus.settings', return_value=conf):
             code, payload = self.call()
         self.assertEqual(code, 200)
         g = payload['giscus']

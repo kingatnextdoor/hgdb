@@ -1,7 +1,7 @@
 """短剧数据展示站（默认零第三方依赖，标准库实现）。
 
-    python web/server.py                 # 直接跑（数据从 output/ 读）
-    python -m web.server --port 9000     # 也可以在仓库根这样跑
+    python hgdb/server.py                 # 直接跑（数据从 output/ 读）
+    python -m hgdb.server --port 9000     # 也可以在仓库根这样跑
 
 模块分工（自下而上，箭头表示依赖方向）::
 
@@ -25,7 +25,7 @@
 关键约束：
 
 1. **api 及其以下都不 import http.server**，只吃 dict / 查询参数。
-   所以加接口、改筛选逻辑都能脱离 HTTP 直接单测（见 tests/test_web_*.py）。
+   所以加接口、改筛选逻辑都能脱离 HTTP 直接单测（见 tests/test_*.py）。
 2. **除了 dbio / schema，任何模块都不出现 `sqlite3`**。
    SQL 一律用 `?` 占位符，走 `conn.execute(sql, params)`。
 """

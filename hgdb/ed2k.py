@@ -14,12 +14,12 @@
 解析失败的**链接行**（含 `ed2k://` 但格式不对）单独计数，页面上提示用户；
 不含 `ed2k://` 的行算「忽略」而不是「失败」，否则每个标题行都会被报成错误。
 
-单独成模块的原因：这段逻辑最需要单测（见 tests/test_web_ed2k.py），
+单独成模块的原因：这段逻辑最需要单测（见 tests/test_ed2k.py），
 而它跟存储、HTTP 都没有关系，放在一起会让测试被迫造数据库。
 """
 import re
 
-from web import config
+from hgdb import config
 
 # ed2k://|file|名字|字节数|32位HASH|/   —— 末尾可能还有 h=AICH 段，也可能缺 `/`
 FILE_LINK = re.compile(

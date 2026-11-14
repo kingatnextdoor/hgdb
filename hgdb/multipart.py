@@ -11,7 +11,7 @@
 真要做（拖整个文件夹上传）就是另一个量级的东西了，不如换框架。
 
 为什么不用第三方库：整个展示站的卖点是「零依赖、clone 就能跑」，为了一个
-上传接口装 python-multipart 不值得。这段代码只有几十行，且有 test_web_ed2k.py 兜着。
+上传接口装 python-multipart 不值得。这段代码只有几十行，且有 test_ed2k.py 兜着。
 """
 from urllib.parse import unquote
 

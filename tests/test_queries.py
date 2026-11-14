@@ -2,7 +2,7 @@
 """筛选 / 排序 / 分页的测试。纯函数，不需要文件也不需要服务器。"""
 import unittest
 
-from web import config, queries
+from hgdb import config, queries
 
 
 def item(drama_id, **extra):

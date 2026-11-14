@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 import compact_exports as ce
-from tests.web_support import record
+from tests.support import record
 
 
 def dump(path, records):

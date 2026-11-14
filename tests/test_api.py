@@ -12,9 +12,9 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-from tests.web_support import build_output, record
-from web import api, config, httpd
-from web.store import Store
+from hgdb import api, config, httpd
+from hgdb.store import Store
+from tests.support import build_output, record
 
 
 def params(**kwargs):

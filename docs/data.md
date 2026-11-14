@@ -17,7 +17,7 @@
 | `favorites.json` | `output/` | 展示站（页面点收藏） | 展示站 |
 | `ed2k.sqlite3` | `output/` | 展示站（上传 TXT） | 展示站 |
 | `video.sqlite3` | `output/` | 展示站（扫描目录、刮削） | 展示站 |
-| `web.log` / `web.pid` | `output/` | `webctl.py` | `webctl.py` |
+| `hgdb.log` / `hgdb.pid` | `output/` | `hgdbctl.py` | `hgdbctl.py` |
 
 人工数据（标签、收藏、两个 sqlite 库）单独存放，**采集工具不该碰**，`manage.py reset`
 也不会带走它们。这样重灌剧集数据不会冲掉你的编辑。
@@ -42,7 +42,7 @@
 | 值 | 含义 |
 |---|---|
 | 缺省 / `1` | 当前版本。老导出没有这个字段，一律当 1 |
-| 大于 `web/config.py:SCHEMA_VERSION` | 数据比本程序新 |
+| 大于 `hgdb/config.py:SCHEMA_VERSION` | 数据比本程序新 |
 
 展示站读到**更高的版本**不会拒绝加载，而是在启动时打一条 WARNING，并把它暴露在
 `/api/stats` 的 `stats.schema_version`（数据实际版本）和 `stats.schema_supported`
@@ -172,7 +172,7 @@ WARNING 数据契约版本 2 高于本站支持的 1，部分字段可能显示�
 ## 合并规则
 
 同一个 `drama_id` 在多个文件里出现时（增量导出必然如此），按下面五条合并。
-合并逻辑在 `web/model.py:merge_record`，有单测兜着。
+合并逻辑在 `hgdb/model.py:merge_record`，有单测兜着。
 
 1. **后读的覆盖先读的。** 顺序是文件修改时间从旧到新，文件内按行序。
 2. **空值不覆盖已有内容。** `null`、`""`、`[]`、`{}` 都算「这次没填」。

@@ -4,12 +4,12 @@
 每个处理函数签名统一为 `handler(store, match, params, body) -> (状态码, 可 JSON 化对象)`，
 这样：
   · 加接口 = 写一个函数 + 往 ROUTES 加一行
-  · 测接口 = 直接 `dispatch(...)`，不用起服务器（见 tests/test_web_api.py）
+  · 测接口 = 直接 `dispatch(...)`，不用起服务器（见 tests/test_api.py）
   · 以后想换 Flask/FastAPI，把这层的函数原样包一层即可
 """
 import re
 
-from web import config, dbio, ed2k, giscus, model, queries, scrape, video, videodb
+from hgdb import config, dbio, ed2k, giscus, model, queries, scrape, video, videodb
 
 NOT_FOUND = {'error': 'not found'}
 UNKNOWN_ENDPOINT = {'error': 'unknown endpoint'}
@@ -518,7 +518,7 @@ def site_config(store, match, params, body):
     """前端启动时取一次的站点配置：站名 / 页脚链接 / 评论。
 
     页面上所有「这是谁的站」的信息都从这里来，HTML 里只有中性占位文字——
-    换站名、换页脚链接、开关评论都只改 web/config.py，不用动静态文件。
+    换站名、换页脚链接、开关评论都只改 hgdb/config.py，不用动静态文件。
 
     没配全 giscus 就返回 `{"giscus": null}`，前端不加载 giscus.app 的任何脚本
     （离线环境也不会多出请求）。

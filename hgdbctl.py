@@ -1,26 +1,26 @@
 # -*- coding: utf-8 -*-
-"""Web 展示服务的启停小工具。
+"""hgdb 展示站服务的启停小工具。
 
-放在项目根（manager.py 旁边），用法：
+放在项目根（manage.py 旁边），用法：
 
-    python webctl.py start              # 后台启动 http://127.0.0.1:8765
-    python webctl.py start --port 9000  # 换端口
-    python webctl.py start --open       # 起来后自动开浏览器
-    python webctl.py start -f           # 前台跑（Ctrl-C 停，报错直接看得见）
-    python webctl.py status             # 在不在跑、端口通不通、库里多少条
-    python webctl.py stop               # 停（先礼后兵）
-    python webctl.py restart            # 停了再起（沿用上次的端口）
-    python webctl.py log [-n 50] [-f]   # 看日志，-f 实时跟随
-    python webctl.py open               # 只在浏览器打开，不动进程
+    python hgdbctl.py start              # 后台启动 http://127.0.0.1:8765
+    python hgdbctl.py start --port 9000  # 换端口
+    python hgdbctl.py start --open       # 起来后自动开浏览器
+    python hgdbctl.py start -f           # 前台跑（Ctrl-C 停，报错直接看得见）
+    python hgdbctl.py status             # 在不在跑、端口通不通、库里多少条
+    python hgdbctl.py stop               # 停（先礼后兵）
+    python hgdbctl.py restart            # 停了再起（沿用上次的端口）
+    python hgdbctl.py log [-n 50] [-f]   # 看日志，-f 实时跟随
+    python hgdbctl.py open               # 只在浏览器打开，不动进程
 
 为什么不全手写命令
 ------------------
-直接 `python web/server.py` 也能跑，但它是个前台进程：终端一关就没了，
+直接 `python hgdb/server.py` 也能跑，但它是个前台进程：终端一关就没了，
 没有 pid 可查，第二次启动会因为端口占用崩一屏 OSError，而 "xx 端口被占用"
 在 Windows 上还得 netstat -ano 反查 pid 再手工杀。这个脚本补的就是这几件事：
 
-  · 后台脱离终端运行，stdout/stderr 落到 output/web.log
-  · pid + 启动参数写 output/web.pid（JSON），restart 能沿用原端口
+  · 后台脱离终端运行，stdout/stderr 落到 output/hgdb.log
+  · pid + 启动参数写 output/hgdb.pid（JSON），restart 能沿用原端口
   · 结合端口反查避免重复启动、避免误杀别的进程
   · 停服务先发 Ctrl-Break（http.server 走 KeyboardInterrupt 自己收尾），
     赖着不走才升级到强杀
@@ -38,10 +38,10 @@ from pathlib import Path
 from urllib.request import urlopen
 
 ROOT = Path(__file__).resolve().parent
-SERVER = ROOT / 'web' / 'server.py'
+SERVER = ROOT / 'hgdb' / 'server.py'
 OUTPUT = ROOT / 'output'
-PID_FILE = OUTPUT / 'web.pid'
-LOG_FILE = OUTPUT / 'web.log'
+PID_FILE = OUTPUT / 'hgdb.pid'
+LOG_FILE = OUTPUT / 'hgdb.log'
 
 DEFAULT_PORT = 8765
 DEFAULT_HOST = '127.0.0.1'
@@ -244,7 +244,7 @@ def cmd_start(args):
         if pid and not pid_alive(pid):
             clear_meta()
         sys.exit('端口 %d 已被 pid=%d 占用（不是本服务记录的进程）。\n'
-                 '换个端口：  python webctl.py start --port %d\n'
+                 '换个端口：  python hgdbctl.py start --port %d\n'
                  '或者先看清楚那是谁：  tasklist /FI "PID eq %d"' % (port, owner, port + 1, owner))
     clear_meta()
     if pid and pid_alive(pid):
@@ -283,7 +283,7 @@ def cmd_start(args):
 
     if not wait_alive(host, port):
         print('启动了，但 %d 秒后接口还没响应——大概率起不来，看下日志：' % 8)
-        print('  python webctl.py log -n 30')
+        print('  python hgdbctl.py log -n 30')
         return 1
 
     stats = api_stats(host, port) or {}
@@ -308,7 +308,7 @@ def cmd_stop(args):
         owner = port_pid(port)
         if owner:
             sys.exit('没有 pid 文件，但端口 %d 正被 pid=%d 占着。\n'
-                     '确认是本站的话：  python webctl.py stop --pid %d' % (port, owner, owner))
+                     '确认是本站的话：  python hgdbctl.py stop --pid %d' % (port, owner, owner))
         print('服务没在跑（端口 %d 空闲，pid 文件也不存在）' % port)
         clear_meta()
         return
@@ -379,14 +379,14 @@ def cmd_status(args):
         print('状态     未运行（无 pid 文件）')
     if owner:
         print('注意     端口 %d 正被 pid=%d 占着，但不是本脚本记录的进程' % (port, owner))
-        print('         python webctl.py stop --pid %d   # 确认是本站再杀' % owner)
+        print('         python hgdbctl.py stop --pid %d   # 确认是本站再杀' % owner)
     else:
         print('端口     %d 空闲' % port)
 
 
 def cmd_log(args):
     if not LOG_FILE.exists():
-        sys.exit('还没有日志：%s（先 python webctl.py start）' % LOG_FILE)
+        sys.exit('还没有日志：%s（先 python hgdbctl.py start）' % LOG_FILE)
     data = LOG_FILE.read_bytes()
     text = data.decode('utf-8', 'replace')
     lines = text.splitlines()
@@ -419,7 +419,7 @@ def cmd_open(args):
     port = meta.get('port') or DEFAULT_PORT
     host = meta.get('host') or DEFAULT_HOST
     if not (meta.get('pid') and pid_alive(meta['pid'])) and not port_pid(port):
-        sys.exit('服务没在跑，先 python webctl.py start')
+        sys.exit('服务没在跑，先 python hgdbctl.py start')
     print('http://%s:%d' % (host, port))
     webbrowser.open('http://%s:%d' % (host, port))
 
@@ -431,7 +431,7 @@ def main():
         pass
 
     parser = argparse.ArgumentParser(
-        prog='webctl.py',
+        prog='hgdbctl.py',
         description='短剧数据展示服务的启停管理',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog='常用：start → status → log -f → stop')

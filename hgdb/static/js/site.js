@@ -1,5 +1,5 @@
 /* 站点身份：站名、文档标题、页脚链接。
-   全部来自 `GET /api/config` 的 site 段（web/config.py 的 SITE_NAME / SITE_TAGLINE /
+   全部来自 `GET /api/config` 的 site 段（hgdb/config.py 的 SITE_NAME / SITE_TAGLINE /
    SITE_LINKS）。HTML 里只写中性占位文字，这样同一份静态文件能部署成不同的站，
    开源版本也不至于带着别人的站名跑。
 

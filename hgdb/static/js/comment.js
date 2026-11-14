@@ -1,5 +1,5 @@
 /* 评论区：giscus —— 评论实体存在 GitHub Discussions 里，本站只负责嵌一个 iframe。
-   · 配置从 `GET /api/config` 取（web/config.py 里的 GISCUS_*）；没配就不加载 giscus.app 的脚本
+   · 配置从 `GET /api/config` 取（hgdb/config.py 里的 GISCUS_*）；没配就不加载 giscus.app 的脚本
    · 一部剧一条讨论：mapping=specific + term=<term_prefix>:<剧 id>，剧名改了也不会串
    · 高度由 giscus 自己算好、postMessage 通知 client.js 设置，这里不用管家
    · 和本项目的其他跨模块约定一致：详情页只调这里的函数，不直接碰 giscus 的细节 */

@@ -43,8 +43,8 @@ DB_SQLITE = ''
 # ---- 站点身份 ----
 # 站名与页脚外链。想换成自己的站，只改这三行，不用动 HTML。
 # 页脚 SITE_LINKS 留空就不显示页脚整块；每项是 (显示文字, 链接) 的二元组。
-SITE_NAME = '短剧资料库'
-SITE_TAGLINE = '本地短剧资料库'
+SITE_NAME = '黄狗短剧'
+SITE_TAGLINE = '本地短剧刮削管理数据库'
 SITE_LINKS = (
     # ('GitHub 仓库', 'https://github.com/you/your-repo'),
     # ('反馈', 'https://github.com/you/your-repo/issues'),
@@ -54,11 +54,12 @@ SITE_LINKS = (
 # 四个值都从 https://giscus.app 的配置页生成（选好仓库和分类，页面底部就是带参数的
 # <script> 片段）。仓库要公开、装过 giscus app、并且开了 Discussions。
 # 必填三项（repo / repo_id / category_id）缺任一项就整块关掉：前端不加载任何外部脚本。
-# 开源版本默认全部留空 —— 填上你自己的，别把别人的仓库写在这里。
-GISCUS_REPO = ''
-GISCUS_REPO_ID = ''
+# 下面填的是本项目自己在用的评论仓库。自己部署时换成自己的那三个值即可
+#（这些 id 会出现在页面 HTML 里，不是密钥；但换成自己的，评论才会进你自己的 Discussions）。
+GISCUS_REPO = 'kingatnextdoor/comments'
+GISCUS_REPO_ID = 'R_kgDOVdKt0Q'
 GISCUS_CATEGORY = 'General'
-GISCUS_CATEGORY_ID = ''
+GISCUS_CATEGORY_ID = 'DIC_kwDOVdKt0c4DKAfg'
 # 可选：主题 / 界面语言 / 讨论映射方式。留空 = 用 hgdb/giscus.py 里的默认值
 #（dark_dimmed / zh-CN / specific）。别把 mapping 改成 pathname 或 url —— 详情页是
 # 弹层、URL 不变，会把所有剧的评论混到一条讨论下面。

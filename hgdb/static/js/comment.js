@@ -126,7 +126,7 @@ export async function mountComments(dramaId, title) {
 
     const g = (conf || {}).giscus;
     if (!g) {
-        box.innerHTML = `<div class="hint">评论区还没配置：在仓库根的 <code>.env</code> 里填 `
+        box.innerHTML = `<div class="hint">评论区还没配置：在仓库根的 <code>hgdb/config.py</code> 里填 `
             + '<code>GISCUS_REPO</code> / <code>GISCUS_REPO_ID</code> / '
             + '<code>GISCUS_CATEGORY_ID</code>（值从 '
             + '<a href="https://giscus.app" target="_blank" rel="noreferrer">giscus.app</a> 生成），'

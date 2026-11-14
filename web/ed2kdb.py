@@ -171,7 +171,7 @@ class Ed2kRepo:
         drama_titles.discard('')
         for link in links:
             link['in_drama'] = 1 if ed2k.normalize_title(link['title']) in drama_titles else 0
-        not_in_drama = sum(1 for l in links if not l['in_drama'])
+        not_in_drama = sum(1 for row in links if not row['in_drama'])
 
         now = _now()
         filename = (filename or '')[:200]
@@ -192,9 +192,9 @@ class Ed2kRepo:
                         (filename, int(size_bytes), parsed['lines'], len(links),
                          parsed['invalid'], now))
                     conn.executemany(insert_sql, [
-                        (l['hash'], l['name'], l['title'], l['episode'],
-                         l['episode_label'], l['size'], l['url'], batch_id,
-                         filename, now, l['in_drama']) for l in links])
+                        (row['hash'], row['name'], row['title'], row['episode'],
+                         row['episode_label'], row['size'], row['url'], batch_id,
+                         filename, now, row['in_drama']) for row in links])
                     inserted = conn.execute(
                         'SELECT COUNT(*) AS c FROM ed2k_link WHERE batch_id = ?',
                         (batch_id,)).fetchone()['c']

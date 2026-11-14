@@ -8,7 +8,6 @@ import json
 from pathlib import Path
 
 
-
 def record(drama_id='1', title='测试剧', **extra):
     """一条最小可用的导出记录（形状与导出契约对齐，见 docs/data.md）。"""
     rec = {

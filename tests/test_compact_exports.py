@@ -5,8 +5,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from tests.web_support import record
 import compact_exports as ce
+from tests.web_support import record
 
 
 def dump(path, records):

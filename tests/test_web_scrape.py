@@ -5,7 +5,6 @@
 """
 import tempfile
 import unittest
-from pathlib import Path
 
 from tests.web_support import build_output, record
 from web import api, dbio, scrape, videodb

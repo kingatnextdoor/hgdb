@@ -9,8 +9,7 @@
 """
 import re
 
-from web import (config, dbio, ed2k, giscus, model, queries, scrape, video,
-                 videodb)
+from web import config, dbio, ed2k, giscus, model, queries, scrape, video, videodb
 
 NOT_FOUND = {'error': 'not found'}
 UNKNOWN_ENDPOINT = {'error': 'unknown endpoint'}

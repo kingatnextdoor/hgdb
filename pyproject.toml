@@ -30,7 +30,8 @@ dependencies = []
 [project.optional-dependencies]
 dev = [
     "pytest>=8",
-    "ruff>=0.6",
+    # 钉版本：ruff 的新版本会不断加规则，跨版本跑 lint 会得到不同结论
+    "ruff==0.6.9",
 ]
 
 [project.scripts]
@@ -41,7 +42,7 @@ duanju-manage = "manage:main"
 [tool.setuptools]
 # 只打包 Python 包和根目录脚本，不带 output/、sample/、tests/。
 packages = ["web"]
-py-modules = ["manage", "webctl"]
+py-modules = ["manage", "webctl", "compact_exports"]
 
 [tool.setuptools.package-data]
 # 前端资源：没有这些，pip 装完之后页面是白屏。
@@ -56,6 +57,10 @@ select = ["E", "F", "W", "I", "UP", "B"]
 ignore = [
     "E501",   # 行宽交给 formatter，不因为注释超长报错
     "B008",
+    # 下面三条是刻意保留的写法，不是为了兼容老版本：
+    "UP031",  # % 格式化：日志与 SQL 拼接里比 f-string 更好读，也别扭地更安全
+    "UP009",  # 每个文件都写 coding 声明：Windows 上拿记事本打开不会乱码
+    "UP038",  # isinstance 不合并成 X | Y：3.10 才支持，且对 tuple 形式更清楚
 ]
 
 [tool.pytest.ini_options]

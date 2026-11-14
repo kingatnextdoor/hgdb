@@ -1,0 +1,33 @@
+# 运行时数据目录：剧集 JSONL、封面、人工库、日志、pid
+output/
+
+# 人工数据库（正常在 output/ 下，这里兜一层防止误提交）
+ed2k.sqlite3
+video.sqlite3
+tag_edits.json
+favorites.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+# 工具缓存
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# 编辑器 / 系统
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# 日志
+*.log
+web.log
+web.pid

@@ -1,0 +1,225 @@
+/* 本地视频文件库：扫描区、扫描结果、管理表。
+   —— 由 styles.css @import 汇总，改样式直接改本文件。*/
+
+/* 顶栏入口与条数徽标（.btn__badge）在 base.css 的「顶栏动作区」里，两个库共用 */
+
+/* ---------------- 弹层标题 ---------------- */
+
+.video__title {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin: 0 44px 16px 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.video__stats { color: var(--muted); font-size: 12px; font-weight: 400; }
+
+/* ---------------- 扫描区 ---------------- */
+
+.video__upload { display: flex; flex-wrap: wrap; gap: 12px; }
+
+.video__pick {
+    flex: 1 1 420px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border: 1px dashed var(--line);
+    border-radius: var(--radius);
+    background: var(--panel-2);
+}
+
+.video__pick .btn { height: 32px; white-space: nowrap; }
+.video__pick input[type="text"] {
+    flex: 1 1 200px;
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--panel);
+    color: var(--text);
+    outline: none;
+}
+
+.video__pick input[type="text"]:focus { border-color: var(--primary); }
+.video__pick input[type="text"]::placeholder { color: var(--muted); }
+
+.video__pick-info {
+    flex: 1 1 100%;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.video__pick-info b { color: var(--muted-2); }
+
+/* ---------------- 扫描结果 ---------------- */
+
+.video__result {
+    margin-top: 14px;
+    padding: 10px 14px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .03);
+    color: var(--muted-2);
+    font-size: 12px;
+    line-height: 1.7;
+    word-break: break-all;
+}
+
+.video__result[hidden] { display: none; }
+.video__result.is-ok { border-color: rgba(255, 210, 28, .35); }
+.video__result.is-ok b { color: var(--primary); }
+.video__result.is-error { border-color: rgba(255, 107, 107, .45); color: #ffb3b3; }
+
+/* ---------------- 搜索栏 ---------------- */
+
+.video__bar { display: flex; gap: 10px; margin-top: 18px; }
+
+.video__bar input {
+    flex: 1 1 auto;
+    height: 34px;
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--panel-2);
+    color: var(--text);
+    outline: none;
+    transition: .15s;
+}
+
+.video__bar input:focus { border-color: var(--primary); }
+.video__bar input::placeholder { color: var(--muted); }
+
+/* ---------------- 扫描历史 ---------------- */
+
+.video__history {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-top: 14px;
+    font-size: 11px;
+}
+
+.video__history-label { color: var(--muted); }
+
+.video__batch {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 25px;
+    padding: 0 4px 0 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    white-space: nowrap;
+    max-width: 380px;
+    overflow: hidden;
+}
+
+.video__batch-x {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.video__batch-x:hover { background: rgba(255, 107, 107, .15); color: #ff6b6b; }
+
+/* ---------------- 管理表 ---------------- */
+
+.video__tablewrap {
+    margin-top: 10px;
+    max-height: 46vh;
+    overflow: auto;
+    border: 1px solid var(--line-soft);
+    border-radius: 10px;
+}
+
+.video-table {
+    width: 100%;
+    min-width: 720px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.video-table th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 9px 10px;
+    background: var(--panel);
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    font-weight: 400;
+    text-align: left;
+}
+
+.video-table td {
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--line-soft);
+    color: var(--muted-2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.video-table tbody tr:hover td { background: rgba(255, 255, 255, .03); }
+.video-table tbody tr:last-child td { border-bottom: 0; }
+
+.video-table th:nth-child(1) { width: 30%; }
+.video-table th:nth-child(2) { width: 80px; }
+.video-table th:nth-child(3) { width: 52px; }
+.video-table th:nth-child(4) { width: 96px; }   /* 刮削状态 */
+.video-table th:nth-child(5) { width: 24%; }
+.video-table th:nth-child(6) { width: 84px; }
+.video-table th:nth-child(7) { width: 60px; }
+
+.video-table__name { color: var(--text); }
+.video-table__ext { color: var(--primary); text-transform: uppercase; }
+.video-table__path { color: var(--muted); }
+
+.video-table__match {
+    display: inline-block;
+    padding: 0 8px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 18px;
+}
+
+.video-table__match.is-matched {
+    border-color: rgba(126, 216, 143, .4);
+    color: #7ed88f;
+}
+
+.video-table__match.is-pending {
+    border-color: rgba(255, 210, 28, .4);
+    color: var(--primary);
+}
+
+.video-table__ops .btn { height: 22px; padding: 0 9px; font-size: 11px; }
+
+.video__tablewrap .empty,
+.video__tablewrap .loading { padding: 40px 0; }
+
+/* ---------------- 底部 ---------------- */
+
+.video__foot { display: flex; justify-content: flex-end; margin-top: 12px; }
+
+/* ---------------- 窄屏 ---------------- */
+
+@media (max-width: 720px) {
+    .video__tablewrap { max-height: 52vh; }
+}

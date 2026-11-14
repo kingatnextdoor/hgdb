@@ -1,0 +1,99 @@
+/* 刮削匹配弹层：骨架（弹层/表格/按钮）复用 video.css 的类，
+   这里只补刮削特有的部分：匹配状态色、候选选择器、搜索框。 */
+
+/* ---------------- 目录下拉 / 重刮选项 ---------------- */
+
+#scrape-root {
+    flex: 1 1 240px;
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--panel);
+    color: var(--text);
+    outline: none;
+}
+
+#scrape-root:focus { border-color: var(--primary); }
+
+.scrape__force {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    font-size: 12px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.scrape__force input { accent-color: var(--primary); }
+
+/* ---------------- 匹配结果单元格 ---------------- */
+
+.scrape-cell-match { color: var(--muted-2); }
+
+.scrape__hit { color: #7ed88f; }              /* 匹配上：绿 */
+.scrape__score {
+    margin-left: 8px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.scrape__none { color: #ff8f8f; }             /* 没找到：红 */
+.scrape__ignored { color: var(--muted); opacity: .7; }
+
+.scrape__ep {
+    display: inline-block;
+    margin-right: 8px;
+    padding: 0 7px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted-2);
+    font-size: 11px;
+    line-height: 18px;
+}
+
+tr.is-ignored td { opacity: .55; }
+tr.is-pending .scrape-cell-match { color: var(--text); }
+
+/* ---------------- 行内改选：搜索 + 候选下拉 ---------------- */
+
+.scrape__pick {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    vertical-align: middle;
+}
+
+.scrape__search {
+    width: 110px;
+    height: 24px;
+    padding: 0 8px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--panel);
+    color: var(--text);
+    font-size: 11px;
+    outline: none;
+}
+
+.scrape__search:focus { border-color: var(--primary); }
+.scrape__search::placeholder { color: var(--muted); }
+
+.scrape__select {
+    max-width: 180px;
+    height: 24px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--panel);
+    color: var(--text);
+    font-size: 11px;
+    outline: none;
+}
+
+.video-table__ops { white-space: nowrap; }
+.scrape-table .video-table__ops { width: 320px; overflow: visible; }
+.scrape-table .video-table__ops .btn { margin-left: 6px; }
+.scrape-table th:nth-child(1) { width: 30%; }
+.scrape-table th:nth-child(2) { width: 26%; }
+.scrape-table th:nth-child(3) { width: 20%; }

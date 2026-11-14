@@ -1,0 +1,34 @@
+/* 评论区（giscus）：详情弹层最底下的一块。
+   iframe 的高度是 giscus 自己算好、postMessage 过来让 client.js 设的，
+   这里只管宽度 / 留白 / 加载态 —— 千万别写死 height，否则楼层多了会被裁掉。 */
+
+.comments {
+    min-height: 120px;          /* 加载中不塌陷，免得弹层高度跳一下 */
+    margin-top: 2px;
+}
+
+.comments iframe {
+    display: block;
+    width: 100%;
+    border: 0;
+    color-scheme: dark;         /* iframe 里的滚动条、表单控件也跟着深色 */
+}
+
+.comments > .loading { color: var(--muted); font-size: 12px; }
+
+/* 「GitHub 账号登录后发言」那行小字，跟在区块标题后面（间距由 .section__label 的 gap 给） */
+.comments__note {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 400;
+}
+
+/* 未配置 / 加载失败时的说明里带链接和键名，得让人看得出可点、可抄 */
+.comments .hint a { color: var(--primary); text-decoration: underline; }
+.comments .hint code {
+    padding: 1px 5px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, .07);
+    color: var(--muted-2);
+    font-size: 11px;
+}

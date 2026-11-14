@@ -1,0 +1,141 @@
+/* 布局层：工具栏、主体骨架、分页。只管位置，不管零件长相。
+   —— 由 styles.css @import 汇总，改样式直接改本文件。*/
+
+/* ---------------- 工具栏 ---------------- */
+
+.toolbar {
+    position: sticky;
+    top: 60px;
+    z-index: 20;
+    padding: 14px 28px 10px;
+    background: rgba(13, 13, 13, .92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line-soft);
+}
+
+.toolbar__row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+.search { flex: 1 1 260px; min-width: 200px; }
+
+.search input {
+    width: 100%;
+    height: 36px;
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--panel-2);
+    outline: none;
+    transition: .15s;
+}
+
+.search input:focus { border-color: var(--primary); }
+.search input::placeholder { color: var(--muted); }
+
+select {
+    height: 36px;
+    padding: 0 30px 0 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--panel-2) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%23888'/></svg>") no-repeat right 12px center;
+    cursor: pointer;
+    appearance: none;
+}
+
+select:hover { border-color: var(--muted); }
+
+/* 快捷筛选开关行：选项固定，不折叠（只有六个），开关复用 .tag 的样子，
+   免得跟下面的标签墙出现两套视觉。 */
+.onlybar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
+.onlybar__label {
+    margin-right: 2px;
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: .5px;
+}
+
+/* 两行完整标签的高度：27*2 + 8 = 62。之前写 76px 会让第三行露出 6px 细条被硬切，
+   看起来像标签被下面的内容盖住。 */
+.tagbar { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; max-height: 62px; overflow: hidden; transition: max-height .2s; }
+.tagbar.is-open { max-height: 460px; overflow: auto; }
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 27px;
+    padding: 0 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--panel-2);     /* 必须：按钮默认底色是浅灰白，不写会白字白底 */
+    color: var(--muted-2);
+    font-size: 12px;
+    cursor: pointer;
+    transition: .15s;
+    user-select: none;
+}
+
+.tag:hover { border-color: var(--muted); color: var(--text); }
+
+.tag.is-on {
+    border-color: var(--primary);
+    background: rgba(255, 210, 28, .1);
+    color: var(--primary);
+}
+
+.tag span { color: var(--muted); font-size: 11px; }
+.tag.is-on span { color: rgba(255, 210, 28, .7); }
+
+.tag--more { border-style: dashed; margin-top: 8px; }
+#tag-more[hidden] { display: none; }
+
+/* ---------------- 主体 ---------------- */
+
+main { padding: 20px 28px 60px; }
+
+.summary { margin-bottom: 14px; color: var(--muted); font-size: 13px; }
+.summary b { color: var(--text); }
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+    gap: 18px 14px;
+}
+
+/* ---------------- 分页 ---------------- */
+
+.pager { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 32px; flex-wrap: wrap; }
+
+.pager button {
+    min-width: 34px;
+    height: 34px;
+    padding: 0 10px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted-2);
+    cursor: pointer;
+}
+
+.pager button:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }
+.pager button.is-on { background: var(--primary); border-color: transparent; color: #000; font-weight: 600; }
+.pager button:disabled { opacity: .35; cursor: default; }
+.pager__gap { color: var(--muted); }
+
+/* ---------------- 页脚 ---------------- */
+
+/* 链接内容由 js/site.js 从 /api/config 的 SITE_LINKS 渲染；为空就整块隐藏。
+   注意 display:flex 会盖掉 [hidden] 的默认 display:none，所以这条必须单独写。 */
+.site-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 0 28px 32px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.site-footer[hidden] { display: none; }
+
+.site-footer a { color: var(--muted-2); transition: color .15s; }
+.site-footer a:hover { color: var(--primary); }

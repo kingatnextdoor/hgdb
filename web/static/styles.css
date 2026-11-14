@@ -1,0 +1,22 @@
+/* 样式入口：只做汇总，具体规则在 css/ 下的文件里。
+   顺序 = 层叠顺序，改顺序可能改变优先级，非必要不要动。
+
+     base.css        变量 / reset / 顶栏
+     layout.css      工具栏 / 主体骨架 / 分页
+     components.css  卡片 / 角标 / 空状态
+     detail.css      详情弹层（含标签编辑）
+     ed2k.css        ED2K 链接库弹层（上传 + 管理表）
+     video.css       本地视频文件库弹层（扫描 + 管理表）
+     scrape.css      刮削匹配弹层（匹配状态色 + 候选选择器）
+     comment.css     详情弹层底部的 giscus 评论区
+
+   加新页面区块：先想清楚属于哪层，再决定往哪个文件加；跨层的新组件建议单独开文件。 */
+
+@import url("css/base.css");
+@import url("css/layout.css");
+@import url("css/components.css");
+@import url("css/detail.css");
+@import url("css/ed2k.css");
+@import url("css/video.css");
+@import url("css/scrape.css");
+@import url("css/comment.css");

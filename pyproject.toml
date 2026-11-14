@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "duanju-web"
+version = "1.0.0"
+description = "短剧数据展示站：把 JSONL + 封面变成一个可浏览、可筛选、可标注、可播放的本地站点"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "duanju-web contributors" }]
+keywords = ["sqlite", "http", "jsonl", "self-hosted", "no-dependencies"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Internet :: WWW/HTTP :: HTTP Servers",
+]
+# 零第三方依赖：只用标准库（http.server + sqlite3）。
+# 这是设计取向，不是还没补完 —— 加依赖前请先想清楚。
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "ruff>=0.6",
+]
+
+[project.scripts]
+duanju-web = "webctl:main"
+duanju-serve = "web.server:main"
+duanju-manage = "manage:main"
+
+[tool.setuptools]
+# 只打包 Python 包和根目录脚本，不带 output/、sample/、tests/。
+packages = ["web"]
+py-modules = ["manage", "webctl"]
+
+[tool.setuptools.package-data]
+# 前端资源：没有这些，pip 装完之后页面是白屏。
+web = ["static/*", "static/css/*", "static/js/*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+ignore = [
+    "E501",   # 行宽交给 formatter，不因为注释超长报错
+    "B008",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# 测试是标准库 unittest 风格，pytest 能直接跑
+python_files = ["test_*.py"]

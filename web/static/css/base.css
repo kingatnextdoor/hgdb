@@ -1,0 +1,216 @@
+/* 基础层：设计变量、reset、顶栏。换主题只改 :root 里的变量。
+   —— 由 styles.css @import 汇总，改样式直接改本文件。*/
+
+/* 视觉风格对齐被抓的站点：深底 + 黄色主色 #ffd21c，卡片封面 374:420，
+   详情弹层照搬播放页 introcard（左海报 + 右三列信息栅格）。 */
+
+:root {
+    --bg: #0d0d0d;
+    --panel: #161616;
+    --panel-2: #111;
+    --card: #141414;
+    --line: rgba(255, 255, 255, .1);
+    --line-soft: rgba(255, 255, 255, .06);
+    --text: #fff;
+    --muted: rgba(255, 255, 255, .45);
+    --muted-2: rgba(255, 255, 255, .62);
+    --primary: #ffd21c;
+    --radius: 12px;
+    --radius-lg: 24px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 14px/1.5 system-ui, -apple-system, "PingFang SC", "Microsoft YaHei",
+          "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+button, select, input { font: inherit; color: inherit; }
+
+/* ---------------- 顶栏 ---------------- */
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 0 28px;
+    height: 60px;
+    background: rgba(13, 13, 13, .92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line-soft);
+}
+
+.brand { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 600; flex: none; }
+
+/* 品牌图标：直接用站点 favicon（96px 位图，28px 显示在 3x 屏也够清晰）；
+   图标本身是圆形的，所以容器不要再加底色/圆角裁剪 */
+.brand__mark {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    flex: none;
+}
+
+.brand__mark img { width: 28px; height: 28px; display: block; }
+
+.stats { display: flex; flex-wrap: wrap; gap: 8px; margin-left: auto; }
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 28px;
+    padding: 0 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted-2);
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.chip b { color: var(--text); font-weight: 600; }
+.chip--warn { border-color: rgba(255, 210, 28, .35); color: var(--primary); }
+
+/* ---------------- 顶栏动作区 ---------------- */
+
+/* 左边 .stats 是只读数据，这里是能点的入口，必须一眼可分：动作区用左侧
+   分隔线切出去，入口用「8px 小圆角 + 实底 + 图标」，和全圆角空心的 .chip
+   形成形状 / 填充 / 图标三重差异。
+   注意别改 .btn 达成这个效果——弹层里十几个地方在复用它。 */
+.topbar__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 14px;
+    border-left: 1px solid var(--line-soft);
+}
+
+/* 两个库入口共用外框和中间的分隔线，看起来是一个整体控件 */
+.libgroup {
+    display: inline-flex;
+    height: 32px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--panel);
+    /* 不加 overflow:hidden：会把分段的 :focus-visible 焦点环裁掉，
+       圆角改由首末段各自负责 */
+}
+
+.libgroup__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 100%;
+    padding: 0 10px;
+    border: 0;
+    background: transparent;
+    color: #e8e8e8;
+    font-size: 12px;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background .15s;
+}
+
+.libgroup__item:first-child { border-radius: 8px 0 0 8px; }
+.libgroup__item:last-child { border-radius: 0 8px 8px 0; }
+.libgroup__item + .libgroup__item { border-left: 1px solid var(--line-soft); }
+
+.libgroup__item:hover { background: rgba(255, 255, 255, .06); }
+.libgroup__item:active { background: rgba(255, 255, 255, .1); }
+
+.libgroup__icon {
+    width: 14px;
+    height: 14px;
+    flex: none;
+    color: var(--muted-2);
+    transition: color .15s;
+}
+
+.libgroup__item:hover .libgroup__icon { color: var(--primary); }
+
+/* 刷新：低频操作，只留图标，hover 才浮出底色 */
+.topbar__icon-btn {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted-2);
+    cursor: pointer;
+    transition: .15s;
+}
+
+.topbar__icon-btn:hover { background: rgba(255, 255, 255, .06); color: var(--primary); }
+.topbar__icon-btn svg { width: 16px; height: 16px; }
+
+/* 条数徽标：两个库入口共用（原来寄居在 ed2k.css，搬到顶栏区） */
+.btn__badge {
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: var(--primary);
+    color: #000;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.btn__badge[hidden] { display: none; }
+
+/* 键盘可达：顶栏这几个都是可聚焦控件，统一焦点环 */
+.libgroup__item:focus-visible,
+.topbar__icon-btn:focus-visible {
+    outline: 2px solid rgba(255, 210, 28, .55);
+    outline-offset: 2px;
+}
+
+/* 窄屏降级：统计 chip 是锦上添花，窄了先让它让位——7 个 chip 全显约要 1000px，
+   加上品牌和入口组，1100 以下一律隐藏（detail.css 720 断点里那条 .stats 规则是
+   旧的下限，留着不冲突）。入口组自身再分两级收：先收图标，再收文字。 */
+@media (max-width: 1100px) {
+    .stats { display: none; }
+}
+
+@media (max-width: 720px) {
+    .libgroup__item svg { display: none; }
+}
+
+@media (max-width: 560px) {
+    .libgroup__text { display: none; }
+    /* .stats 隐藏后它的 margin-left:auto 也没了，靠右要在这里补回来 */
+    .topbar__actions { margin-left: auto; }
+}
+
+.btn {
+    height: 30px;
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted-2);
+    cursor: pointer;
+    transition: .15s;
+}
+
+.btn:hover { border-color: var(--primary); color: var(--primary); }
+/* 请求进行中要能看出「点了正在处理」，并且别让连点重复提交 */
+.btn:disabled { opacity: .55; cursor: default; pointer-events: none; }
+.btn--primary { background: var(--primary); border-color: transparent; color: #000; font-weight: 600; }
+.btn--primary:hover { opacity: .9; color: #000; }

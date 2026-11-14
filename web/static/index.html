@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<!--
+  页面骨架：只放结构与 id，样式在 styles.css（@import css/），逻辑在 js/main.js（ES module）。
+  加新板块 = 在这里加容器 + 在 js/ 下加模块（见 docs/web.md「怎么加东西」）。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>短剧资料库</title>
+<!-- 图标：ico 兜底在前，现代浏览器会优先选后面的 svg；/favicon.* 由 httpd 单独路由（带缓存）。
+     生成工具是 realfavicongenerator.net，源文件在项目根目录 favicon/，换图后重新复制过来。 -->
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+<link rel="manifest" href="/static/site.webmanifest">
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+<!-- 顶栏：品牌 + 统计 chip + 资料库入口 + 刷新（stats.js 渲染 chip）
+     chip 是只读数字，两个库入口是能点的控件，所以后者放进 .topbar__actions
+     用分隔线切出去，并且做成实底小圆角 + 图标——别退回成胶囊，会和 chip 混。
+     站名是中性占位：真名由 /api/config 取回来填（见 js/site.js），
+     这样同一个静态文件可以部署成不同的站。 -->
+<header class="topbar">
+    <div class="brand"><span class="brand__mark"><img src="/static/favicon-96x96.png"
+        alt="" width="28" height="28"></span><a href="/"><span data-site-name>短剧资料库</span></a></div>
+    <div class="stats" id="stats"></div>
+    <div class="topbar__actions">
+        <!-- 两个库并成一个双联按钮组：本来就是一回事（外部资料库），放一个单元里 -->
+        <div class="libgroup">
+            <button class="libgroup__item" id="btn-ed2k" title="上传 TXT，管理已入库的 ED2K 链接">
+                <svg class="libgroup__icon" viewBox="0 0 24 24" aria-hidden="true" fill="none"
+                    stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 1 1 0 10h-2"/>
+                    <path d="M8 12h8"/>
+                </svg>
+                <span class="libgroup__text">ED2K 链接库</span>
+                <span class="btn__badge" id="ed2k-badge" hidden></span>
+            </button>
+            <button class="libgroup__item" id="btn-video" title="扫描本地文件夹，管理视频文件名记录">
+                <svg class="libgroup__icon" viewBox="0 0 24 24" aria-hidden="true" fill="none"
+                    stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 5.5v13l10-6.5z"/>
+                </svg>
+                <span class="libgroup__text">本地视频</span>
+                <span class="btn__badge" id="video-badge" hidden></span>
+            </button>
+        </div>
+        <button class="topbar__icon-btn" id="btn-reload" title="重新读取 output 目录" aria-label="刷新">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
+                stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/>
+            </svg>
+        </button>
+    </div>
+</header>
+
+<section class="toolbar">
+    <div class="toolbar__row">
+        <div class="search">
+            <input id="q" type="search" placeholder="搜索剧名 / 标签 / 作者 / ID" autocomplete="off">
+        </div>
+        <select id="sort" title="排序">
+            <option value="update">按更新时间</option>
+            <option value="score">按评分</option>
+            <option value="episode">按集数</option>
+            <option value="views">按播放量</option>
+            <option value="added">按入库时间</option>
+            <option value="changed">按变更时间</option>
+            <option value="title">按剧名</option>
+        </select>
+        <select id="order" title="顺序">
+            <option value="desc">降序</option>
+            <option value="asc">升序</option>
+        </select>
+        <select id="min_score" title="最低评分">
+            <option value="">评分不限</option>
+            <option value="9">9 分以上</option>
+            <option value="8.5">8.5 分以上</option>
+            <option value="8">8 分以上</option>
+            <option value="7">7 分以上</option>
+        </select>
+        <select id="size" title="每页数量">
+            <option value="24">24 / 页</option>
+            <option value="48" selected>48 / 页</option>
+            <option value="96">96 / 页</option>
+        </select>
+    </div>
+    <!-- 快捷筛选：开关式多选，点几个就是几个条件同时满足（交集）。
+         按钮写死在这里，交互在 js/onlybar.js，判定谓词在后端 queries.ONLY_FILTERS。 -->
+    <div class="onlybar" id="onlybar">
+        <span class="onlybar__label">筛选</span>
+        <button class="tag" data-only="fav" title="只看已收藏的剧" aria-pressed="false">收藏</button>
+        <button class="tag" data-only="video" title="只看本地视频库里匹配到文件的剧" aria-pressed="false">本地视频</button>
+        <button class="tag" data-only="ed2k" title="只看 ED2K 链接库里能搜到资源的剧" aria-pressed="false">ED2K</button>
+        <button class="tag" data-only="new" title="只看新上架的剧" aria-pressed="false">新上架</button>
+        <button class="tag" data-only="original" title="只看原创剧" aria-pressed="false">原创</button>
+        <button class="tag" data-only="cover" title="只看有封面的剧" aria-pressed="false">有封面</button>
+        <button class="tag" data-only="detail" title="只看抓到了详情的剧" aria-pressed="false">有详情</button>
+    </div>
+    <div class="tagbar" id="tagbar"></div>
+    <button class="tag tag--more" id="tag-more" hidden>展开全部</button>
+</section>
+
+<main>
+    <div class="summary" id="summary"></div>
+    <div class="grid" id="grid"></div>
+    <div class="loading" id="loading">加载中…</div>
+    <div class="empty" id="empty" hidden>没有匹配的剧集，换个条件试试</div>
+    <nav class="pager" id="pager"></nav>
+</main>
+
+<!-- 页脚：仓库与留言入口，列表页底部常驻（低调灰色，hover 变主色）。
+     链接由 web/config.py 的 SITE_LINKS 决定，没配就整块不显示（js/site.js 渲染）。 -->
+<footer class="site-footer" id="site-footer" hidden></footer>
+
+<div class="modal" id="modal" hidden>
+    <div class="modal__panel" id="modal-panel"></div>
+</div>
+
+<!-- ED2K 链接库弹层：内容由 js/ed2k.js 在首次打开时构建 -->
+<div class="modal" id="ed2k-modal" hidden>
+    <div class="modal__panel modal__panel--wide" id="ed2k-panel"></div>
+</div>
+
+<!-- 本地视频文件库弹层：内容由 js/video.js 在首次打开时构建 -->
+<div class="modal" id="video-modal" hidden>
+    <div class="modal__panel modal__panel--wide" id="video-panel"></div>
+</div>
+
+<!-- 刮削匹配弹层：内容由 js/scrape.js 在首次打开时构建 -->
+<div class="modal" id="scrape-modal" hidden>
+    <div class="modal__panel modal__panel--wide" id="scrape-panel"></div>
+</div>
+
+<script type="module" src="/static/js/main.js"></script>
+</body>
+</html>
